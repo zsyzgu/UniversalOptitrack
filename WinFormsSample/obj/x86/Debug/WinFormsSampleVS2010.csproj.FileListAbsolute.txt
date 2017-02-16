@@ -80,3 +80,4 @@ D:\hololens\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormTestApp.Prop
 D:\hololens\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormsSampleVS2010.csproj.GenerateResource.Cache
 D:\hololens\UniversialOptitrack\bin\WinFormTestApp.exe
 D:\hololens\UniversialOptitrack\bin\WinFormTestApp.pdb
+D:\hololens\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormsSampleVS2010.csprojResolveAssemblyReference.cache

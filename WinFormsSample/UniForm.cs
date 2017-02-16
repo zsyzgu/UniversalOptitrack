@@ -63,6 +63,18 @@ namespace WinFormTestApp
         }
 
         //THE MOST IMPORTANT FUNCTION: to define the UniForm of broadcasting optitrack data.
+        /**
+         * Modified by daaqing & zsyzgu from Optitrack Standard Program.
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         **/
         private void broadcast() {
             server.Send("framestart");
             FrameOfMocapData frame = m_FrameOfData;
@@ -73,16 +85,8 @@ namespace WinFormTestApp
                 double rx = RadiansToDegrees(eulers[0]);
                 double ry = RadiansToDegrees(eulers[1]);
                 double rz = RadiansToDegrees(eulers[2]);
-                server.Send("rb " + rb.x + " " + rb.y + " " + rb.z + " " + rx + " " + ry + " " + rz);
-                /*for (int j = 0; j < rb.nMarkers; j++) {
-                    Marker marker = rb.Markers[j];
-                    server.Send("rbposition " + marker.x + " " + marker.y + " " + marker.z);
-                }*/
+                server.Send("rb " + rb.ID + " " + rb.x + " " + rb.y + " " + rb.z + " " + rx + " " + ry + " " + rz);
             }
-            /*for (int i = 0; i < frame.nOtherMarkers; ++i) {
-                Marker marker = frame.OtherMarkers[i];
-                server.Send("othermarker " + marker.x + " " + marker.y + " " + marker.z);
-            }*/
             server.Send("frameend");
         }
 
