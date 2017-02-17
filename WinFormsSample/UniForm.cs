@@ -79,7 +79,7 @@ namespace WinFormTestApp
                 float[] quat = new float[4] { rb.qx, rb.qy, rb.qz, rb.qw };
                 float[] eulers = m_NatNet.QuatToEuler(quat, (int)NATEulerOrder.NAT_XYZr);
                 int id = rb.ID;
-                double x = rb.x * 0.5;
+                double x = -rb.x * 0.5;
                 double y = rb.y * 0.5;
                 double z = rb.z * 0.5;
                 double rx = RadiansToDegrees(eulers[0]);
