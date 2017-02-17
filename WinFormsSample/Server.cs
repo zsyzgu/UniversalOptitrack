@@ -13,8 +13,8 @@ namespace WinFormTestApp
 {
     class Server
     {
-        public string serverIp = "192.168.1.129";
-        public int serverPort = 7643;
+        public string serverIp = "192.168.1.167";
+        public int serverPort = 8520;
         public TcpListener tcpListener;
         public List<TcpClient> clientList = new List<TcpClient>();
         public object clientListMutex = new object();

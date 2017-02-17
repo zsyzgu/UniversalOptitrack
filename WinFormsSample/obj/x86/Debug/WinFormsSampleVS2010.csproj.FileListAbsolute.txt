@@ -81,3 +81,12 @@ D:\hololens\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormsSampleVS201
 D:\hololens\UniversialOptitrack\bin\WinFormTestApp.exe
 D:\hololens\UniversialOptitrack\bin\WinFormTestApp.pdb
 D:\hololens\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormsSampleVS2010.csprojResolveAssemblyReference.cache
+D:\zsyzgu\UniversialOptitrack\bin\WinFormTestApp.exe.config
+D:\zsyzgu\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormTestApp.exe
+D:\zsyzgu\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormTestApp.pdb
+D:\zsyzgu\UniversialOptitrack\bin\WinFormTestApp.exe
+D:\zsyzgu\UniversialOptitrack\bin\WinFormTestApp.pdb
+D:\zsyzgu\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormsSampleVS2010.csprojResolveAssemblyReference.cache
+D:\zsyzgu\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormTestApp.UniForm.resources
+D:\zsyzgu\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormTestApp.Properties.Resources.resources
+D:\zsyzgu\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormsSampleVS2010.csproj.GenerateResource.Cache

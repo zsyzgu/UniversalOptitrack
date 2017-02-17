@@ -68,11 +68,7 @@ namespace WinFormTestApp
          * 
          * 
          * 
-         * 
-         * 
-         * 
-         * 
-         * 
+         *  
          * 
          **/
         private void broadcast() {
@@ -82,10 +78,14 @@ namespace WinFormTestApp
                 RigidBodyData rb = frame.RigidBodies[i];
                 float[] quat = new float[4] { rb.qx, rb.qy, rb.qz, rb.qw };
                 float[] eulers = m_NatNet.QuatToEuler(quat, (int)NATEulerOrder.NAT_XYZr);
+                int id = rb.ID;
+                double x = rb.x * 0.5;
+                double y = rb.y * 0.5;
+                double z = rb.z * 0.5;
                 double rx = RadiansToDegrees(eulers[0]);
                 double ry = RadiansToDegrees(eulers[1]);
                 double rz = RadiansToDegrees(eulers[2]);
-                server.Send("rb " + rb.ID + " " + rb.x + " " + rb.y + " " + rb.z + " " + rx + " " + ry + " " + rz);
+                server.Send("rb " + id + " " + x + " " + y + " " + z + " " + rx + " " + ry + " " + rz);
             }
             server.Send("frameend");
         }
