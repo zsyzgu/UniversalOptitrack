@@ -90,3 +90,12 @@ D:\zsyzgu\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormsSampleVS2010.
 D:\zsyzgu\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormTestApp.UniForm.resources
 D:\zsyzgu\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormTestApp.Properties.Resources.resources
 D:\zsyzgu\UniversialOptitrack\WinFormsSample\obj\x86\Debug\WinFormsSampleVS2010.csproj.GenerateResource.Cache
+D:\zsyzgu\UniversalOptitrack\bin\WinFormTestApp.exe.config
+D:\zsyzgu\UniversalOptitrack\WinFormsSample\obj\x86\Debug\WinFormTestApp.exe
+D:\zsyzgu\UniversalOptitrack\WinFormsSample\obj\x86\Debug\WinFormTestApp.pdb
+D:\zsyzgu\UniversalOptitrack\bin\WinFormTestApp.exe
+D:\zsyzgu\UniversalOptitrack\bin\WinFormTestApp.pdb
+D:\zsyzgu\UniversalOptitrack\WinFormsSample\obj\x86\Debug\WinFormsSampleVS2010.csprojResolveAssemblyReference.cache
+D:\zsyzgu\UniversalOptitrack\WinFormsSample\obj\x86\Debug\WinFormTestApp.UniForm.resources
+D:\zsyzgu\UniversalOptitrack\WinFormsSample\obj\x86\Debug\WinFormTestApp.Properties.Resources.resources
+D:\zsyzgu\UniversalOptitrack\WinFormsSample\obj\x86\Debug\WinFormsSampleVS2010.csproj.GenerateResource.Cache

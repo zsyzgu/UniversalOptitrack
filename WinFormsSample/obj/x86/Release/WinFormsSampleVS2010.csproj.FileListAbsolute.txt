@@ -1,1 +1,10 @@
 H:\放这里\NatNetSDK\Samples\bin\WinFormTestApp.exe.config
+D:\zsyzgu\UniversalOptitrack\bin\WinFormTestApp.exe.config
+D:\zsyzgu\UniversalOptitrack\bin\WinFormTestApp.exe
+D:\zsyzgu\UniversalOptitrack\bin\WinFormTestApp.pdb
+D:\zsyzgu\UniversalOptitrack\WinFormsSample\obj\x86\Release\WinFormsSampleVS2010.csprojResolveAssemblyReference.cache
+D:\zsyzgu\UniversalOptitrack\WinFormsSample\obj\x86\Release\WinFormTestApp.UniForm.resources
+D:\zsyzgu\UniversalOptitrack\WinFormsSample\obj\x86\Release\WinFormTestApp.Properties.Resources.resources
+D:\zsyzgu\UniversalOptitrack\WinFormsSample\obj\x86\Release\WinFormsSampleVS2010.csproj.GenerateResource.Cache
+D:\zsyzgu\UniversalOptitrack\WinFormsSample\obj\x86\Release\WinFormTestApp.exe
+D:\zsyzgu\UniversalOptitrack\WinFormsSample\obj\x86\Release\WinFormTestApp.pdb

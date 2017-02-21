@@ -72,7 +72,7 @@ namespace WinFormTestApp
          * 
          **/
         private void broadcast() {
-            server.Send("framestart");
+            server.Send("begin");
             FrameOfMocapData frame = m_FrameOfData;
             for (int i = 0; i < frame.nRigidBodies; ++i) {
                 RigidBodyData rb = frame.RigidBodies[i];
@@ -83,11 +83,11 @@ namespace WinFormTestApp
                 double y = rb.y * 0.5;
                 double z = rb.z * 0.5;
                 double rx = RadiansToDegrees(eulers[0]);
-                double ry = RadiansToDegrees(eulers[1]);
-                double rz = RadiansToDegrees(eulers[2]);
+                double ry = -RadiansToDegrees(eulers[1]);
+                double rz = -RadiansToDegrees(eulers[2]);
                 server.Send("rb " + id + " " + x + " " + y + " " + z + " " + rx + " " + ry + " " + rz);
             }
-            server.Send("frameend");
+            server.Send("end");
         }
 
         private void UniForm_Load(object sender, EventArgs e)
