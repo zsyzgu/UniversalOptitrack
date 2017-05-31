@@ -13,6 +13,7 @@ namespace WinFormTestApp
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
+            fw.Close();
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -159,6 +160,7 @@ namespace WinFormTestApp
             this.checkBoxConnect.Text = "Connect";
             this.checkBoxConnect.UseVisualStyleBackColor = true;
             this.checkBoxConnect.CheckedChanged += new System.EventHandler(this.checkBoxConnect_CheckedChanged);
+            this.checkBoxConnect.CheckedChanged += new System.EventHandler(this.buttonGetDataDescriptions_Click);
             // 
             // buttonGetDataDescriptions
             // 
@@ -168,7 +170,7 @@ namespace WinFormTestApp
             this.buttonGetDataDescriptions.TabIndex = 11;
             this.buttonGetDataDescriptions.Text = "Get Data Descriptions";
             this.buttonGetDataDescriptions.UseVisualStyleBackColor = true;
-            this.buttonGetDataDescriptions.Click += new System.EventHandler(this.buttonGetDataDescriptions_Click);
+         //   this.buttonGetDataDescriptions.Click += new System.EventHandler(this.buttonGetDataDescriptions_Click);
             // 
             // chart1
             // 

@@ -9,14 +9,19 @@ using System.Windows.Forms;
 using System.Net;
 using System.Threading;
 using System.Runtime.InteropServices;
-
+using System.IO;
 using NatNetML;
+
 
 namespace WinFormTestApp
 {
     public partial class UniForm : Form
     {
+        int fileid = 0;
         Server server;
+
+        StreamWriter fw;
+        String data;
 
         // [NatNet] Our NatNet object
         private NatNetML.NatNetClientML m_NatNet;
@@ -74,6 +79,12 @@ namespace WinFormTestApp
         private void broadcast() {
             server.Send("begin");
             FrameOfMocapData frame = m_FrameOfData;
+      
+                data += "Frame\n";
+            data += frame.fTimestamp + "\n";
+            data += DateTime.Now.TimeOfDay.ToString();        // 20:33:50.7187500
+ 
+
             for (int i = 0; i < frame.nRigidBodies; ++i) {
                 RigidBodyData rb = frame.RigidBodies[i];
                 float[] quat = new float[4] { rb.qx, rb.qy, rb.qz, rb.qw };
@@ -83,10 +94,16 @@ namespace WinFormTestApp
                 double y = rb.y * 0.5;
                 double z = rb.z * 0.5;
                 double rx = RadiansToDegrees(eulers[0]);
-                double ry = -RadiansToDegrees(eulers[1]);
+                double ry = RadiansToDegrees(eulers[1]);
                 double rz = -RadiansToDegrees(eulers[2]);
                 server.Send("rb " + id + " " + x + " " + y + " " + z + " " + rx + " " + ry + " " + rz);
+                data += "rb " + id + " " + rb.Tracked + " " + x + " " + y + " " + z + " " + rx + " " + ry + " " + rz + "\n";
             }
+            for (int i = 0; i < frame.nOtherMarkers; i++) {
+                Marker m = frame.OtherMarkers[i];
+                data += "x " + m.x + " y " + m.y + " z " + m.z + "\n";
+            }
+            data += "\n";
             server.Send("end");
         }
 
@@ -147,7 +164,12 @@ namespace WinFormTestApp
         private void Connect()
         {
             // [NatNet] connect to a NatNet server
+            data = "";
             int returnCode = 0;
+            fw = new StreamWriter(@"F:\test" + fileid + ".txt", true);
+            fw.WriteLine(DateTime.UtcNow);
+            fw.Flush();
+            fileid++;
             string strLocalIP = comboBoxLocal.SelectedItem.ToString();
             string strServerIP = textBoxServer.Text;
             returnCode = m_NatNet.Initialize(strLocalIP, strServerIP);
@@ -208,6 +230,10 @@ namespace WinFormTestApp
         {
             // [NatNet] disconnect
             m_NatNet.Uninitialize();
+            fw.WriteLine(data);
+            fw.WriteLine(DateTime.UtcNow);
+            fw.Flush(); 
+            fw.Close();
             checkBoxConnect.Text = "Connect";
         }
 
@@ -396,100 +422,103 @@ namespace WinFormTestApp
 
         private void buttonGetDataDescriptions_Click(object sender, EventArgs e)
         {
-            mRigidBodies.Clear();
-            dataGridView1.Rows.Clear();
-            htMarkers.Clear();
-            htRigidBodies.Clear();
-            needMarkerListUpdate = true;
-
-            OutputMessage("Retrieving Data Descriptions....");
-            List<NatNetML.DataDescriptor> descs = new List<NatNetML.DataDescriptor>();
-            bool bSuccess = m_NatNet.GetDataDescriptions(out descs);
-            if(bSuccess)
+            if (checkBoxConnect.Checked)
             {
-                OutputMessage(String.Format("Retrieved {0} Data Descriptions....", descs.Count));
-                int iObject = 0;
-                foreach (NatNetML.DataDescriptor d in descs)
+                mRigidBodies.Clear();
+                dataGridView1.Rows.Clear();
+                htMarkers.Clear();
+                htRigidBodies.Clear();
+                needMarkerListUpdate = true;
+
+                OutputMessage("Retrieving Data Descriptions....");
+                List<NatNetML.DataDescriptor> descs = new List<NatNetML.DataDescriptor>();
+                bool bSuccess = m_NatNet.GetDataDescriptions(out descs);
+                if (bSuccess)
                 {
-                    iObject++;
-
-                    // MarkerSets
-                    if (d.type == (int)NatNetML.DataDescriptorType.eMarkerSetData)                    
+                    OutputMessage(String.Format("Retrieved {0} Data Descriptions....", descs.Count));
+                    int iObject = 0;
+                    foreach (NatNetML.DataDescriptor d in descs)
                     {
-                        NatNetML.MarkerSet ms = (NatNetML.MarkerSet)d;                       
-                        OutputMessage("Data Def " + iObject.ToString() + " [MarkerSet]");
-                        
-                        OutputMessage(" Name : " + ms.Name);
-                        OutputMessage(String.Format(" Markers ({0}) ",ms.nMarkers));
-                        dataGridView1.Rows.Add("MarkerSet: " + ms.Name);
-                        for(int i=0; i<ms.nMarkers; i++)
+                        iObject++;
+
+                        // MarkerSets
+                        if (d.type == (int)NatNetML.DataDescriptorType.eMarkerSetData)
                         {
-                            OutputMessage(("  " + ms.MarkerNames[i]));
-                            int rowIndex = dataGridView1.Rows.Add("  " + ms.MarkerNames[i]);
-                            // MarkerNameIndexToRow map
-                            String strUniqueName = ms.Name + i.ToString();
-                            int key = strUniqueName.GetHashCode();
-                            htMarkers.Add(key, rowIndex); 
+                            NatNetML.MarkerSet ms = (NatNetML.MarkerSet)d;
+                            OutputMessage("Data Def " + iObject.ToString() + " [MarkerSet]");
+
+                            OutputMessage(" Name : " + ms.Name);
+                            OutputMessage(String.Format(" Markers ({0}) ", ms.nMarkers));
+                            dataGridView1.Rows.Add("MarkerSet: " + ms.Name);
+                            for (int i = 0; i < ms.nMarkers; i++)
+                            {
+                                OutputMessage(("  " + ms.MarkerNames[i]));
+                                int rowIndex = dataGridView1.Rows.Add("  " + ms.MarkerNames[i]);
+                                // MarkerNameIndexToRow map
+                                String strUniqueName = ms.Name + i.ToString();
+                                int key = strUniqueName.GetHashCode();
+                                htMarkers.Add(key, rowIndex);
+                            }
                         }
-                    }
-                    // RigidBodies
-                    else if (d.type == (int)NatNetML.DataDescriptorType.eRigidbodyData)             
-                    {
-                        NatNetML.RigidBody rb = (NatNetML.RigidBody)d;
-
-                        OutputMessage("Data Def " + iObject.ToString() + " [RigidBody]");
-                        OutputMessage(" Name : " + rb.Name);
-                        OutputMessage(" ID : " + rb.ID);
-                        OutputMessage(" ParentID : " + rb.parentID);
-                        OutputMessage(" OffsetX : " + rb.offsetx);
-                        OutputMessage(" OffsetY : " + rb.offsety);
-                        OutputMessage(" OffsetZ : " + rb.offsetz);
-                     
-                        mRigidBodies.Add(rb);
-
-                        int rowIndex = dataGridView1.Rows.Add("RigidBody: "+rb.Name);
-                        // RigidBodyIDToRow map
-                        int key = rb.ID.GetHashCode();
-                        htRigidBodies.Add(key, rowIndex);
-
-                    }
-                    // Skeletons
-                    else if (d.type == (int)NatNetML.DataDescriptorType.eSkeletonData)
-                    {
-                        NatNetML.Skeleton sk = (NatNetML.Skeleton)d;
-
-                        OutputMessage("Data Def " + iObject.ToString() + " [Skeleton]");
-                        OutputMessage(" Name : " + sk.Name);
-                        OutputMessage(" ID : " + sk.ID);
-                        dataGridView1.Rows.Add("Skeleton: " + sk.Name);
-                        for (int i = 0; i < sk.nRigidBodies; i++)
+                        // RigidBodies
+                        else if (d.type == (int)NatNetML.DataDescriptorType.eRigidbodyData)
                         {
-                            RigidBody rb = sk.RigidBodies[i];
-                            OutputMessage(" RB Name  : " + rb.Name);
-                            OutputMessage(" RB ID    : " + rb.ID);
+                            NatNetML.RigidBody rb = (NatNetML.RigidBody)d;
+
+                            OutputMessage("Data Def " + iObject.ToString() + " [RigidBody]");
+                            OutputMessage(" Name : " + rb.Name);
+                            OutputMessage(" ID : " + rb.ID);
                             OutputMessage(" ParentID : " + rb.parentID);
-                            OutputMessage(" OffsetX  : " + rb.offsetx);
-                            OutputMessage(" OffsetY  : " + rb.offsety);
-                            OutputMessage(" OffsetZ  : " + rb.offsetz);
-                            int rowIndex = dataGridView1.Rows.Add("Bone: " + rb.Name);
+                            OutputMessage(" OffsetX : " + rb.offsetx);
+                            OutputMessage(" OffsetY : " + rb.offsety);
+                            OutputMessage(" OffsetZ : " + rb.offsetz);
+
+                            mRigidBodies.Add(rb);
+
+                            int rowIndex = dataGridView1.Rows.Add("RigidBody: " + rb.Name);
                             // RigidBodyIDToRow map
-                            int uniqueID = sk.ID * 1000 + rb.ID;
-                            int key = uniqueID.GetHashCode();
-                            if (htRigidBodies.ContainsKey(key))
-                                MessageBox.Show("Duplicate RigidBody ID");
-                            else
-                                htRigidBodies.Add(key, rowIndex);
+                            int key = rb.ID.GetHashCode();
+                            htRigidBodies.Add(key, rowIndex);
+
                         }
-                    }
-                    else
-                    {
-                        OutputMessage("Unknown DataType");
+                        // Skeletons
+                        else if (d.type == (int)NatNetML.DataDescriptorType.eSkeletonData)
+                        {
+                            NatNetML.Skeleton sk = (NatNetML.Skeleton)d;
+
+                            OutputMessage("Data Def " + iObject.ToString() + " [Skeleton]");
+                            OutputMessage(" Name : " + sk.Name);
+                            OutputMessage(" ID : " + sk.ID);
+                            dataGridView1.Rows.Add("Skeleton: " + sk.Name);
+                            for (int i = 0; i < sk.nRigidBodies; i++)
+                            {
+                                RigidBody rb = sk.RigidBodies[i];
+                                OutputMessage(" RB Name  : " + rb.Name);
+                                OutputMessage(" RB ID    : " + rb.ID);
+                                OutputMessage(" ParentID : " + rb.parentID);
+                                OutputMessage(" OffsetX  : " + rb.offsetx);
+                                OutputMessage(" OffsetY  : " + rb.offsety);
+                                OutputMessage(" OffsetZ  : " + rb.offsetz);
+                                int rowIndex = dataGridView1.Rows.Add("Bone: " + rb.Name);
+                                // RigidBodyIDToRow map
+                                int uniqueID = sk.ID * 1000 + rb.ID;
+                                int key = uniqueID.GetHashCode();
+                                if (htRigidBodies.ContainsKey(key))
+                                    MessageBox.Show("Duplicate RigidBody ID");
+                                else
+                                    htRigidBodies.Add(key, rowIndex);
+                            }
+                        }
+                        else
+                        {
+                            OutputMessage("Unknown DataType");
+                        }
                     }
                 }
-            }
-            else
-            {
-                OutputMessage("Unable to retrieve DataDescriptions");
+                else
+                {
+                    OutputMessage("Unable to retrieve DataDescriptions");
+                }
             }
         }
 
